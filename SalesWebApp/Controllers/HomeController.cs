@@ -17,7 +17,8 @@ namespace SalesWebApp.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Sales Management System";
+            ViewData["Creator"] = "Vinícius Bernardes";
 
             return View();
         }
