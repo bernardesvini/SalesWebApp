@@ -42,7 +42,7 @@ namespace SalesWebApp.Models
 
         public double TotalSales (DateTime initial, DateTime final)
         {
-            // SEM LAMBDA
+            // *Mycomments SEM LAMBDA
 
             //double totalSales = 0.0;
 

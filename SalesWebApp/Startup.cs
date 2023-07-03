@@ -39,6 +39,8 @@ namespace SalesWebApp
                      options.UseMySql(Configuration.GetConnectionString("SalesWebAppContext"), builder => 
                         builder.MigrationsAssembly("SalesWebApp")));
 
+            services.AddScoped<SeedingService>(); // *Mycomments Registro da SeedingService na injeção de dependência
+
             // MSSQL
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -47,13 +49,14 @@ namespace SalesWebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService) //*Mycomments  Add seeding, Configure aceita que coloque outros parametros. E se essa estiver registrado na injeção de dependência, automaticamente é resolvido uma instância desse objeto 
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment()) // *Mycomments testa se está no perfil de desenvolvimento
             {
                 app.UseDeveloperExceptionPage();
+                seedingService.Seed(); // *Mycomments aplica-se o seed
             }
-            else
+            else // *Mycomments App já está publicada
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();

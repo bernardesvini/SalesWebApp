@@ -15,7 +15,7 @@ namespace SalesWebApp.Data
         }
 
         public DbSet<Department> Department { get; set; }
-        public DbSet<Seller> Seller { get; set; }
+        public DbSet<Seller> Seller { get; set; } //*Mycomments Add DBSet para novas tabelas 
         public DbSet<SalesRecord> SalesRecord { get; set; }
     }
 }
