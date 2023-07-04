@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesWebApp.Data;
+using SalesWebApp.Services;
 
 namespace SalesWebApp
 {
@@ -40,6 +41,7 @@ namespace SalesWebApp
                         builder.MigrationsAssembly("SalesWebApp")));
 
             services.AddScoped<SeedingService>(); // *Mycomments Registro da SeedingService na injeção de dependência
+            services.AddScoped<SellerService>(); // *Mycomments Registro da Service na injeção de dependência
 
             // MSSQL
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
