@@ -34,7 +34,7 @@ namespace SalesWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Seller seller)
+        public IActionResult Create(Seller seller) // MyComments Quando o método é chamado de um formulario, o framework sabe que trata-se de um POST, por isso chama este método e não o anterior, que é GET
         {
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index));
