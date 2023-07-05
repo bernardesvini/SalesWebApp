@@ -44,5 +44,26 @@ namespace SalesWebApp.Controllers
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index));
         }
+        // GET
+        public IActionResult Delete (int? id) // ? indica que paramentro é opcional
+        {
+            if (id == null)
+                return NotFound();
+
+            var obj = _sellerService.FindbyId(id.Value); // usasse o value, pois este é opcional
+
+            if (obj == null)
+                return NotFound();
+
+            return View(obj);
+        }
+       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id) // MyComments Quando o método é chamado de um formulario, o framework sabe que trata-se de um POST, por isso chama este método e não o anterior, que é GET
+        {
+            _sellerService.Remove(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

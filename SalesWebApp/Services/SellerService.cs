@@ -26,5 +26,17 @@ namespace SalesWebApp.Services
             _context.Add(seller);
             _context.SaveChanges();
         }
+
+        public Seller FindbyId(int id)
+        {
+            return _context.Seller.FirstOrDefault(seller => seller.Id == id);
+        }
+
+        public void Remove (int id)
+        {
+            var sellerToDelete = _context.Seller.Find(id); // nao pode ser _context.Seller.FirstOrDefault(seller => seller.Id == id - porque isso é uma prevenção no find para nao achar null, no delete, caso nao ache o ID disponivel, deletaria o default
+            _context.Remove(sellerToDelete);
+            _context.SaveChanges();
+        }
     }
 }

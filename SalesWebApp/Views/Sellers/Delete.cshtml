@@ -1,0 +1,47 @@
+﻿@model Seller
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Are you sure that you want to delete ? </h3> 
+
+<div>
+    <h4>Seller</h4>
+    <hr /> @*pula liha*@
+<dl class="dl-horizontal">
+    @*listar*@
+    <dt>
+        @Html.DisplayNameFor(model => model.Name) @*nome do campo*@
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Name) @*valor do campo*@
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Email) @*nome do campo*@
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Email) @*valor do campo*@
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.BirthDate) @*nome do campo*@
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.BirthDate) @*valor do campo*@
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.BaseSalary) @*nome do campo*@
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.BaseSalary) @*valor do campo*@
+    </dd>
+</dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index">Back to List</a>
+    </form>
+
+</div>
