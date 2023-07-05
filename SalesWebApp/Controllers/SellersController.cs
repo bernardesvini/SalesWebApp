@@ -5,16 +5,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using SalesWebApp.Services;
 using SalesWebApp.Models;
+using SalesWebApp.Models.ViewModels;
 
 namespace SalesWebApp.Controllers
 {
     public class SellersController : Controller
     {
         private readonly SellerService _sellerService;
+        private readonly DepartmentService _departmentService; // pois devemos inserir departamento ao vendedor
 
-        public SellersController(SellerService service)
+        public SellersController(SellerService sellerService, DepartmentService departmentService)
         {
-            _sellerService = service;
+            _sellerService = sellerService;
+            _departmentService = departmentService;
         }
 
         public IActionResult Index()
@@ -26,10 +29,12 @@ namespace SalesWebApp.Controllers
             // Mycomment - abaixo como pensei
             // return View(_sellerService.FindAll());
         }
-
+        //GET
         public IActionResult Create()
         {
-            return View();
+            var departments = _departmentService.FindAll();
+            var viewModel = new SellerFormViewModel { Departments = departments };
+            return View(viewModel);
         }
 
         [HttpPost]

@@ -7,7 +7,7 @@ using SalesWebApp.Data;
 
 namespace SalesWebApp.Services
 {
-    public class SellerService 
+    public class SellerService
     {
         private readonly SalesWebAppContext _context; // cria dependencia com o repositório
 
@@ -23,7 +23,6 @@ namespace SalesWebApp.Services
 
         public void Insert(Seller seller)
         {
-            seller.Department = _context.Department.First();
             _context.Add(seller);
             _context.SaveChanges();
         }
