@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SalesWebApp.Services;
 using SalesWebApp.Models;
 using SalesWebApp.Models.ViewModels;
+using SalesWebApp.Services.Exceptions;
 
 namespace SalesWebApp.Controllers
 {
@@ -45,7 +46,7 @@ namespace SalesWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
         // GET
-        public IActionResult Delete (int? id) // ? indica que paramentro é opcional
+        public IActionResult Delete(int? id) // ? indica que paramentro é opcional
         {
             if (id == null)
                 return NotFound();
@@ -57,7 +58,7 @@ namespace SalesWebApp.Controllers
 
             return View(obj);
         }
-       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id) // MyComments Quando o método é chamado de um formulario, o framework sabe que trata-se de um POST, por isso chama este método e não o anterior, que é GET
@@ -76,6 +77,43 @@ namespace SalesWebApp.Controllers
                 return NotFound();
 
             return View(obj);
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var obj = _sellerService.FindbyId(id.Value);
+
+            if (obj == null)
+                return NotFound();
+
+            List<Department> departments = _departmentService.FindAll();
+            SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Seller seller)
+        {
+            if (id != seller.Id)
+                return BadRequest();
+            try
+            {
+                _sellerService.Update(seller);
+            }
+            catch (NotFoundException)
+            {
+                return BadRequest();
+            }
+            catch (DbConcurrencyException)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
