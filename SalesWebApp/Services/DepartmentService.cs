@@ -20,5 +20,6 @@ namespace SalesWebApp.Services
         {
             return _context.Department.OrderBy(x => x.Name).ToList(); // order by retorna por ordem de nome
         }
+
     }
 }

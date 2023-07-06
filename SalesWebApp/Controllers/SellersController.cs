@@ -65,5 +65,17 @@ namespace SalesWebApp.Controllers
             _sellerService.Remove(id);
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult Details(int id) // ? indica que paramentro é opcional
+        {
+            if (id == null)
+                return NotFound();
+
+            var obj = _sellerService.FindbyId(id);
+            if (obj == null)
+                return NotFound();
+
+            return View(obj);
+        }
     }
 }

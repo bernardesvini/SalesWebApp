@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SalesWebApp.Models;
 using SalesWebApp.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesWebApp.Services
 {
@@ -29,7 +30,7 @@ namespace SalesWebApp.Services
 
         public Seller FindbyId(int id)
         {
-            return _context.Seller.FirstOrDefault(seller => seller.Id == id);
+            return _context.Seller.Include(obj => obj.Department).FirstOrDefault(seller => seller.Id == id); // include é um comando para fazer o inner, este comando esta na Microsoft.entityFrameworkCore
         }
 
         public void Remove (int id)
