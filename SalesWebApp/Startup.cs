@@ -45,6 +45,7 @@ namespace SalesWebApp
             services.AddScoped<SeedingService>(); // *Mycomments Registro da SeedingService na injeção de dependência
             services.AddScoped<SellerService>(); // *Mycomments Registro da Service na injeção de dependência
             services.AddScoped<DepartmentService>(); // *Mycomments Registro da Service na injeção de dependência
+            services.AddScoped<SalesRecordService>(); // *Mycomments Registro da Service na injeção de dependência
 
             // MSSQL
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
