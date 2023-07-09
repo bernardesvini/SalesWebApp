@@ -105,14 +105,11 @@ namespace SalesWebApp.Controllers
             {
                 _sellerService.Update(seller);
             }
-            catch (NotFoundException e)
+            catch (ApplicationException e)
             {
                 return RedirectToAction(nameof(Error), new { message = e.Message });
             }
-            catch (DbConcurrencyException e)
-            {
-                return RedirectToAction(nameof(Error), new { message = e.Message });
-            }
+
 
             return RedirectToAction(nameof(Index));
         }

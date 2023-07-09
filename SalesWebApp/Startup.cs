@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesWebApp.Data;
 using SalesWebApp.Services;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace SalesWebApp
 {
@@ -54,6 +56,17 @@ namespace SalesWebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService) //*Mycomments  Add seeding, Configure aceita que coloque outros parametros. E se essa estiver registrado na injeção de dependência, automaticamente é resolvido uma instância desse objeto 
         {
+
+            var enUS = new CultureInfo("en-US"); // definindo cultura a utilizar, por conta de formatações
+            var localizationOption = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(enUS),
+                SupportedCultures = new List<CultureInfo> { enUS },
+                SupportedUICultures = new List<CultureInfo> { enUS }
+            };
+
+            app.UseRequestLocalization(localizationOption);
+
             if (env.IsDevelopment()) // *Mycomments testa se está no perfil de desenvolvimento
             {
                 app.UseDeveloperExceptionPage();
