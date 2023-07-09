@@ -12,6 +12,7 @@
 <div class=" row">
     <div class="col-md-6">
         <form asp-action="Edit">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="Seller.Id" />
             <div class=" form-group">
                 <label asp-for="Seller.Name" class="control-label"></label>
@@ -42,3 +43,6 @@
 </div>
 
 <hr />
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

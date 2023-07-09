@@ -43,6 +43,13 @@ namespace SalesWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Seller seller) // MyComments Quando o método é chamado de um formulario, o framework sabe que trata-se de um POST, por isso chama este método e não o anterior, que é GET
         {
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index));
         }
@@ -82,6 +89,7 @@ namespace SalesWebApp.Controllers
 
         public IActionResult Edit(int? id)
         {
+
             if (id == null)
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
 
@@ -99,6 +107,14 @@ namespace SalesWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller)
         {
+
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+
             if (id != seller.Id)
                 return RedirectToAction(nameof(Error), new { message = "Id don't match" });
             try
