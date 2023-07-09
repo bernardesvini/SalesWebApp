@@ -7,6 +7,7 @@ using SalesWebApp.Services;
 using SalesWebApp.Models;
 using SalesWebApp.Models.ViewModels;
 using SalesWebApp.Services.Exceptions;
+using System.Diagnostics;
 
 namespace SalesWebApp.Controllers
 {
@@ -49,12 +50,12 @@ namespace SalesWebApp.Controllers
         public IActionResult Delete(int? id) // ? indica que paramentro é opcional
         {
             if (id == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided"});
 
             var obj = _sellerService.FindbyId(id.Value); // usasse o value, pois este é opcional
 
             if (obj == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" }); 
 
             return View(obj);
         }
@@ -70,11 +71,11 @@ namespace SalesWebApp.Controllers
         public IActionResult Details(int id) // ? indica que paramentro é opcional
         {
             if (id == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" }); 
 
             var obj = _sellerService.FindbyId(id);
             if (obj == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" }); 
 
             return View(obj);
         }
@@ -82,12 +83,12 @@ namespace SalesWebApp.Controllers
         public IActionResult Edit(int? id)
         {
             if (id == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
 
             var obj = _sellerService.FindbyId(id.Value);
 
             if (obj == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
 
             List<Department> departments = _departmentService.FindAll();
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
@@ -99,21 +100,34 @@ namespace SalesWebApp.Controllers
         public IActionResult Edit(int id, Seller seller)
         {
             if (id != seller.Id)
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "Id don't match" });
             try
             {
                 _sellerService.Update(seller);
             }
-            catch (NotFoundException)
+            catch (NotFoundException e)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
-            catch (DbConcurrencyException)
+            catch (DbConcurrencyException e)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
 
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id
+            };
+
+            return View(viewModel);
+        }
+
+
     }
 }
