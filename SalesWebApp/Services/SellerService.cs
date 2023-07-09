@@ -26,7 +26,7 @@ namespace SalesWebApp.Services
         public async Task InsertAsync(Seller seller)
         {
             _context.Add(seller);
-           await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Seller> FindbyIdAsync(int id)
@@ -36,9 +36,16 @@ namespace SalesWebApp.Services
 
         public async Task RemoveAsync(int id)
         {
-            var sellerToDelete = await _context.Seller.FindAsync(id); // MyComments nao pode ser _context.Seller.FirstOrDefault(seller => seller.Id == id - porque isso é uma prevenção no find para nao achar null, no delete, caso nao ache o ID disponivel, deletaria o default
-            _context.Remove(sellerToDelete);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var sellerToDelete = await _context.Seller.FindAsync(id); // MyComments nao pode ser _context.Seller.FirstOrDefault(seller => seller.Id == id - porque isso é uma prevenção no find para nao achar null, no delete, caso nao ache o ID disponivel, deletaria o default
+                _context.Remove(sellerToDelete);
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateException e)
+            {
+                throw new IntegrityException(e.Message);
+            }
         }
 
         public async Task UpdateAsync(Seller obj)
