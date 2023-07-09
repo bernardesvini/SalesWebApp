@@ -18,38 +18,41 @@ namespace SalesWebApp.Services
             _context = context;
         }
 
-        public List<Seller> FindAll()
+        public async Task<List<Seller>> FindAllAsync()
         {
-            return _context.Seller.ToList();
+            return await _context.Seller.ToListAsync();
         }
 
-        public void Insert(Seller seller)
+        public async Task InsertAsync(Seller seller)
         {
             _context.Add(seller);
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
 
-        public Seller FindbyId(int id)
+        public async Task<Seller> FindbyIdAsync(int id)
         {
-            return _context.Seller.Include(obj => obj.Department).FirstOrDefault(seller => seller.Id == id); // include é um comando para fazer o inner, este comando esta na Microsoft.entityFrameworkCore
+            return await _context.Seller.Include(obj => obj.Department).FirstOrDefaultAsync(seller => seller.Id == id); // include é um comando para fazer o inner, este comando esta na Microsoft.entityFrameworkCore
         }
 
-        public void Remove(int id)
+        public async Task RemoveAsync(int id)
         {
-            var sellerToDelete = _context.Seller.Find(id); // MyComments nao pode ser _context.Seller.FirstOrDefault(seller => seller.Id == id - porque isso é uma prevenção no find para nao achar null, no delete, caso nao ache o ID disponivel, deletaria o default
+            var sellerToDelete = await _context.Seller.FindAsync(id); // MyComments nao pode ser _context.Seller.FirstOrDefault(seller => seller.Id == id - porque isso é uma prevenção no find para nao achar null, no delete, caso nao ache o ID disponivel, deletaria o default
             _context.Remove(sellerToDelete);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(Seller obj)
+        public async Task UpdateAsync(Seller obj)
         {
-            if (!_context.Seller.Any(x => x.Id == obj.Id))
+
+            bool hasAny = await _context.Seller.AnyAsync(x => x.Id == obj.Id);
+
+            if (!hasAny)
                 throw new NotFoundException("Id not found");
 
             try
             {
                 _context.Update(obj);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException e) // MyComments captura uma excessao do banco de dados e trata como uma excessao criada nos services, assim nosso controller so ira lidar com exceçoes do service, respeitando o MVC
             {
